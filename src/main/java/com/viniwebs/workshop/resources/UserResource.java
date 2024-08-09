@@ -1,11 +1,13 @@
 package com.viniwebs.workshop.resources;
 
 import com.viniwebs.workshop.domain.User;
+import com.viniwebs.workshop.dto.UserDto;
 import com.viniwebs.workshop.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -15,15 +17,16 @@ public class UserResource {
     private UserService service;
 
     @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
+    public ResponseEntity<List<UserDto>> getUsers() {
         List<User> users = service.findAll();
-        return ResponseEntity.ok().body(users);
+        List<UserDto> usersDto = users.stream().map(UserDto::new).toList();
+        return ResponseEntity.ok().body(usersDto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable String id) {
+    public ResponseEntity<UserDto> getUser(@PathVariable String id) {
         User user = service.findById(id);
-        return ResponseEntity.ok().body(user);
+        return ResponseEntity.ok().body(new UserDto(user));
     }
 
     @PostMapping
