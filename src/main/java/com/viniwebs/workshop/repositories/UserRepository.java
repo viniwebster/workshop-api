@@ -1,4 +1,4 @@
-package com.viniwebs.workshop.repository;
+package com.viniwebs.workshop.repositories;
 
 import com.viniwebs.workshop.domain.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
