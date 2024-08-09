@@ -3,10 +3,12 @@ package com.viniwebs.workshop.resources;
 import com.viniwebs.workshop.domain.User;
 import com.viniwebs.workshop.dto.UserDto;
 import com.viniwebs.workshop.services.UserService;
+import com.viniwebs.workshop.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,16 +28,16 @@ public class UserResource {
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable String id) {
         User user = service.findById(id);
+        if (user == null) {
+            throw new ObjectNotFoundException("User with id " + id + " not found");
+        }
         return ResponseEntity.ok().body(new UserDto(user));
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User obj = new User();
-        obj.setId(user.getId());
-        obj.setEmail(user.getEmail());
-        obj.setUsername(user.getUsername());
-        service.save(obj);
-        return ResponseEntity.ok().body(obj);
+    public ResponseEntity<Void> createUser(@RequestBody User user) {
+        service.save(user);
+        URI uri = URI.create("/users/" + user.getId());
+        return ResponseEntity.created(uri).build();
     }
 }
