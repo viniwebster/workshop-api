@@ -1,5 +1,6 @@
 package com.viniwebs.workshop.resources;
 
+import com.viniwebs.workshop.domain.Post;
 import com.viniwebs.workshop.domain.User;
 import com.viniwebs.workshop.dto.UserDto;
 import com.viniwebs.workshop.services.UserService;
@@ -53,4 +54,14 @@ public class UserResource {
         service.update(user);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}/posts")
+    public ResponseEntity<List<Post>> getPosts(@PathVariable String id) {
+        User user = service.findById(id);
+        if (user == null) {
+            throw new ObjectNotFoundException("User with id " + id + " not found");
+        }
+        return ResponseEntity.ok().body(user.getPosts());
+    }
+
 }
