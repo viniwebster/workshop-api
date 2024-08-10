@@ -3,6 +3,7 @@ package com.viniwebs.workshop.config;
 import com.viniwebs.workshop.domain.Post;
 import com.viniwebs.workshop.domain.User;
 import com.viniwebs.workshop.dto.AuthorDto;
+import com.viniwebs.workshop.dto.CommentDto;
 import com.viniwebs.workshop.repositories.PostRepository;
 import com.viniwebs.workshop.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,13 @@ public class Instantiation implements CommandLineRunner {
         Post p2 = new Post("Ferias", sdf.parse("29/05/2023"), "Hoje viajo para maldivas" ,new AuthorDto(user2));
         Post p3= new Post("Corinthians",sdf.parse("10/07/2024"), "O corinthians é gigante!" ,new AuthorDto(user1));
         Post p4 = new Post("Frio", sdf.parse("09/08/2020"), "Hoje esta muito frio" ,new AuthorDto(user4));
+
+        CommentDto c1 = new CommentDto("Boa viagem", new AuthorDto(user2), sdf.parse("09/08/2024"));
+        CommentDto c2 = new CommentDto("Boa viagem", new AuthorDto(user1), sdf.parse("09/08/2024"));
+        CommentDto c3 = new CommentDto("Boa viagem", new AuthorDto(user3), sdf.parse("09/08/2024"));
+
+        p1.getComments().addAll(Arrays.asList(c1, c2));
+        p2.getComments().add(c3);
 
         postRepository.saveAll(Arrays.asList(p1, p2, p3, p4));
 
